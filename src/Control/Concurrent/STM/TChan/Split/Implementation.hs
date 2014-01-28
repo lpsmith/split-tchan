@@ -14,17 +14,16 @@
 module Control.Concurrent.STM.TChan.Split.Implementation where
 
 import Control.Concurrent.STM
-
 import Data.Typeable (Typeable)
 
 type TVarList a = TVar (TList a)
 data TList a = TNil | TCons a {-# UNPACK #-} !(TVarList a)
 
-newtype SendPort a 
-    = SendPort (TVar (TVarList a)) 
+newtype SendPort a
+    = SendPort (TVar (TVarList a))
       deriving (Eq, Typeable)
 
-newtype ReceivePort a 
+newtype ReceivePort a
     = ReceivePort (TVar (TVarList a))
       deriving (Eq, Typeable)
 
@@ -110,7 +109,7 @@ duplicate :: ReceivePort a -> STM (ReceivePort a)
 duplicate (ReceivePort read) = do
     listhead <- readTVar read
     read <- newTVar listhead
-    return (ReceivePort read)  
+    return (ReceivePort read)
 
 split :: SendPort a -> STM (ReceivePort a, SendPort a)
 split (SendPort write) = do
@@ -118,5 +117,4 @@ split (SendPort write) = do
     old_hole <- swapTVar write new_hole
     read     <- newTVar new_hole
     write'   <- newTVar old_hole
-    return (ReceivePort read, SendPort write') 
-    
+    return (ReceivePort read, SendPort write')

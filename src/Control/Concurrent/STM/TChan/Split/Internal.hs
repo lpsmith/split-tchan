@@ -10,7 +10,7 @@
 --
 ------------------------------------------------------------------------------
 
-module Control.Concurrent.STM.TChan.Split.Internal 
+module Control.Concurrent.STM.TChan.Split.Internal
     ( TVarList
     , TList
     , SendPort(..)
